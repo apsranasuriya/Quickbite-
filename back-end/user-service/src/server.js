@@ -10,17 +10,46 @@ app.use(cors());
 const mongoUri = process.env.MONGO_URI || "mongodb://localhost:27017/quickbite";
 mongoose.connect(mongoUri, { useNewUrlParser: true, useUnifiedTopology: true });
 
-const userRoutes = require("./routes/userRoutes");
-app.use("/users", userRoutes);
+// Import the User model
+const User = require("./models/User");
 
 app.get("/", (req, res) => {
     res.send("Welcome to the User Service!");
 });
 
-app.post('/api/register', (req, res) => {
-    const { username, email, password } = req.body;
-    console.log("User registered:", username, email);
-    res.json({ message: "User registered successfully" });
+// Register User
+app.post("/api/register", (req, res) => {
+    const { name, email, password } = req.body;
+
+    const newUser = new User({
+        name,
+        email,
+        password,
+    });
+
+    newUser
+        .save()
+        .then(() => {
+            console.log("User registered:", name, email);
+            res.json({ message: "User registered successfully" });
+        })
+        .catch((err) => {
+            console.error("Error registering user:", err);
+            res.status(500).json({ error: "Failed to register user" });
+        });
+});
+
+// Get All Users
+app.get("/api/users", (req, res) => {
+    User.find()
+        .select('-password') // Exclude the password field from the response
+        .then((users) => {
+            res.json({ users });
+        })
+        .catch((err) => {
+            console.error("Error fetching users:", err);
+            res.status(500).json({ error: "Failed to fetch users" });
+        });
 });
 
 const port = process.env.PORT || 5000;

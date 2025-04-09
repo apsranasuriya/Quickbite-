@@ -3,10 +3,11 @@ name: CI/CD Pipeline for Node.js Microservices
 on:
   push:
     branches:
-      - master  # Only trigger pipeline on changes to the 'main' branch
+      - master  # Trigger pipeline on changes to the 'master' branch
 
 jobs:
-  build:
+  # Job for User Service
+  user-service:
     runs-on: ubuntu-latest  # Use the latest version of Ubuntu
 
     steps:
@@ -14,25 +15,71 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
 
-      # Step 2: Set up Node.js environment
-      - name: Set up Node.js
+      # Step 2: Set up Node.js for user-service
+      - name: Set up Node.js for user-service
         uses: actions/setup-node@v2
         with:
-          node-version: '16'  # You can specify your Node.js version here
+          node-version: '16'  # Use the appropriate Node.js version
 
-      # Step 3: Install dependencies
-      - name: Install dependencies
-        run: npm install  # Installs the packages listed in package.json
-
-      # Step 4: Run tests
-      - name: Run tests
-        run: npm test  # Runs your tests (make sure you have tests set up)
-
-      # Step 5: Build the project (if you need a build step)
-      - name: Build project
-        run: npm run build  # Run your build script, if applicable
-
-      # Step 6: Deploy the application (this can be optional or specific to your project)
-      - name: Deploy to production
+      # Step 3: Install dependencies for user-service
+      - name: Install dependencies for user-service
         run: |
-          echo "Deploying to production"  # Replace with your actual deployment commands
+          cd back-end/user-service
+          npm install  # Installs the packages listed in user-service's package.json
+
+      # Step 4: Run tests for user-service
+      - name: Run tests for user-service
+        run: |
+          cd back-end/user-service
+          npm test  # Run tests (make sure you have tests set up)
+
+      # Step 5: Build the user-service project
+      - name: Build user-service
+        run: |
+          cd back-end/user-service
+          npm run build  # Run the build script for user-service
+
+      # Step 6: Deploy user-service (replace with your actual deploy script)
+      - name: Deploy user-service to production
+        run: |
+          cd back-end/user-service
+          echo "Deploying user-service to production"  # Replace with actual deployment commands
+
+  # Job for Order Service
+  order-service:
+    runs-on: ubuntu-latest  # Use the latest version of Ubuntu
+
+    steps:
+      # Step 1: Checkout code from GitHub
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      # Step 2: Set up Node.js for order-service
+      - name: Set up Node.js for order-service
+        uses: actions/setup-node@v2
+        with:
+          node-version: '16'  # Use the appropriate Node.js version
+
+      # Step 3: Install dependencies for order-service
+      - name: Install dependencies for order-service
+        run: |
+          cd back-end/order-service
+          npm install  # Installs the packages listed in order-service's package.json
+
+      # Step 4: Run tests for order-service
+      - name: Run tests for order-service
+        run: |
+          cd back-end/order-service
+          npm test  # Run tests (make sure you have tests set up)
+
+      # Step 5: Build the order-service project
+      - name: Build order-service
+        run: |
+          cd back-end/order-service
+          npm run build  # Run the build script for order-service
+
+      # Step 6: Deploy order-service (replace with your actual deploy script)
+      - name: Deploy order-service to production
+        run: |
+          cd back-end/order-service
+          echo "Deploying order-service to production"  # Replace with actual deployment commands

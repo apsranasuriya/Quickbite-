@@ -33,17 +33,17 @@ jobs:
           cd back-end/user-service
           npm test  # Run tests (make sure you have tests set up)
 
-      # Step 5: Build the user-service project
-      - name: Build user-service
-        run: |
-          cd back-end/user-service
-          npm run build  # Run the build script for user-service
+      # # Step 5: Build the user-service project
+      # - name: Build user-service
+      #   run: |
+      #     cd back-end/user-service
+      #     npm run build  # Run the build script for user-service
 
-      # Step 6: Deploy user-service (replace with your actual deploy script)
-      - name: Deploy user-service to production
-        run: |
-          cd back-end/user-service
-          echo "Deploying user-service to production"  # Replace with actual deployment commands
+      # # Step 6: Deploy user-service (replace with your actual deploy script)
+      # - name: Deploy user-service to production
+      #   run: |
+      #     cd back-end/user-service
+      #     echo "Deploying user-service to production"  # Replace with actual deployment commands
 
   # Job for Order Service
   order-service:

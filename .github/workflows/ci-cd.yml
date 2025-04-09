@@ -72,14 +72,14 @@ jobs:
           cd back-end/order-service
           npm test  # Run tests (make sure you have tests set up)
 
-      # Step 5: Build the order-service project
-      - name: Build order-service
-        run: |
-          cd back-end/order-service
-          npm run build  # Run the build script for order-service
+      # # Step 5: Build the order-service project
+      # - name: Build order-service
+      #   run: |
+      #     cd back-end/order-service
+      #     npm run build  # Run the build script for order-service
 
-      # Step 6: Deploy order-service (replace with your actual deploy script)
-      - name: Deploy order-service to production
-        run: |
-          cd back-end/order-service
-          echo "Deploying order-service to production"  # Replace with actual deployment commands
+      # # Step 6: Deploy order-service (replace with your actual deploy script)
+      # - name: Deploy order-service to production
+      #   run: |
+      #     cd back-end/order-service
+      #     echo "Deploying order-service to production"  # Replace with actual deployment commands

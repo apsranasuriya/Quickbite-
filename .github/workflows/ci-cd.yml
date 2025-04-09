@@ -1,0 +1,38 @@
+name: CI/CD Pipeline for Node.js Microservices
+
+on:
+  push:
+    branches:
+      - master  # Only trigger pipeline on changes to the 'main' branch
+
+jobs:
+  build:
+    runs-on: ubuntu-latest  # Use the latest version of Ubuntu
+
+    steps:
+      # Step 1: Checkout code from GitHub
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      # Step 2: Set up Node.js environment
+      - name: Set up Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: '16'  # You can specify your Node.js version here
+
+      # Step 3: Install dependencies
+      - name: Install dependencies
+        run: npm install  # Installs the packages listed in package.json
+
+      # Step 4: Run tests
+      - name: Run tests
+        run: npm test  # Runs your tests (make sure you have tests set up)
+
+      # Step 5: Build the project (if you need a build step)
+      - name: Build project
+        run: npm run build  # Run your build script, if applicable
+
+      # Step 6: Deploy the application (this can be optional or specific to your project)
+      - name: Deploy to production
+        run: |
+          echo "Deploying to production"  # Replace with your actual deployment commands

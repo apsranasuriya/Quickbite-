@@ -1,0 +1,9 @@
+prometheus:
+  extraScrapeConfigs: |
+    - job_name: 'user-service'
+      static_configs:
+        - targets: ['user-service.default.svc.cluster.local:3000']
+    - job_name: 'order-service'
+      static_configs:
+        - targets: ['order-service.default.svc.cluster.local:3001']
+

@@ -8,12 +8,12 @@ services:
   user-service:
     build: ./user-service
     ports:
-      - "5000:5000"
+      - "5001:5001"
     depends_on:
       - mongo
   order-service:
     build: ./order-service
     ports:
-      - "5000:5000"
+      - "5002:5002"
     depends_on:
       - mongo

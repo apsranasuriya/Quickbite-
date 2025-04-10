@@ -1,9 +1,18 @@
-const express = require("express");
-const { createProxyMiddleware } = require("http-proxy-middleware");
-
+const express = require('express');
+const axios = require('axios');
 const app = express();
+const PORT = process.env.PORT || 5000;
 
-app.use("/users", createProxyMiddleware({ target: "http://user-service:5000", changeOrigin: true }));
-app.use("/restaurants", createProxyMiddleware({ target: "http://restaurant-service:5001", changeOrigin: true }));
+app.get('/users', async (req, resp) => {
+    const response = await axios.get('http://localhost:5001/users');
+    resp.json(response?.data);
+})
 
-app.listen(8000, () => console.log("API Gateway running on port 8000"));
+app.get('/order', async (req, resp) => {
+    const response = await axios.get('http://localhost:5002/order');
+    resp.json(response?.data);
+})
+
+app.listen(PORT, () => {
+    console.log('User Service is running on port: '+ PORT);
+})

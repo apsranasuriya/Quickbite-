@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>QuickBite Login</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background-color: #fdf6ec;
+    }
+
+    .center-wrapper {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 40px 20px;
+      display: flex;
+      flex-direction: row;
+      justify-content: center;
+      align-items: center;
+      gap: 40px;
+    }
+
+    .logo-side img {
+      max-width: 100%;
+      height: auto;
+      border-radius: 8px;
+    }
+
+    .form-side {
+      background-color: #fff;
+      padding: 30px;
+      border-radius: 10px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      min-width: 300px;
+    }
+
+    .form-side h2 {
+      margin-bottom: 20px;
+    }
+
+    .form-side input[type="text"],
+    .form-side input[type="password"] {
+      width: 100%;
+      padding: 10px;
+      margin-bottom: 12px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+    }
+
+    .form-side label {
+      display: block;
+      margin-bottom: 10px;
+    }
+
+    .form-side button {
+      background-color: #ff5a00;
+      color: white;
+      border: none;
+      padding: 10px;
+      width: 100%;
+      border-radius: 5px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+
+    .form-side .sign-in {
+      margin-top: 10px;
+      font-size: 14px;
+      text-align: center;
+    }
+
+    .form-side .sign-in a {
+      color: #ff5a00;
+      text-decoration: none;
+    }
+
+    @media (max-width: 768px) {
+      .center-wrapper {
+        flex-direction: column;
+        text-align: center;
+      }
+
+      .form-side {
+        width: 100%;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="center-wrapper">
+    <div class="logo-side">
+      <img src="img1.png" alt="QuickBite Logo">
+    </div>
+    <div class="form-side">
+      <h2>Login</h2>
+      <form id="loginForm">
+        <input type="text" id="username" placeholder="Username" required />
+        <input type="password" id="password" placeholder="Password" required />
+        <button type="submit">Login</button>
+      </form>
+      <div class="signin" style="text-align: center; margin-top: 15px;">
+        Don't have an account?
+        <a href="reg.html" style="color: #ff5a00; text-decoration: none;">Register</a>
+      </div>
+      <div id="response" style="text-align: center; margin-top: 15px;"></div>
+    </div>
+  </div>
+
+  <script>
+    document.getElementById('loginForm').addEventListener('submit', async function (event) {
+      event.preventDefault(); // Prevent default form submission
+
+      const username = document.getElementById('username').value;
+      const password = document.getElementById('password').value;
+      const responseDiv = document.getElementById('response');
+
+      // Sending login credentials to the backend
+      const response = await fetch('http://localhost:5001/login', {
+        method: 'POST',  // Ensure the method is POST
+        headers: {
+          'Content-Type': 'application/json'  // Make sure to specify the content type
+        },
+        body: JSON.stringify({ username, password })  // Send the data as JSON
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        responseDiv.innerHTML = `<p style="color: green;">${data.message}</p>`;
+      } else {
+        responseDiv.innerHTML = `<p style="color: red;">${data.message}</p>`;
+      }
+    });
+  </script>
+</body>
+
+</html>

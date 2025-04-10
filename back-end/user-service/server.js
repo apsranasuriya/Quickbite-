@@ -1,69 +1,41 @@
-// require("dotenv").config();
-// const express = require("express");
-// const mongoose = require("mongoose");
-// const cors = require("cors");
-
-// const app = express();
-// app.use(express.json());
-// app.use(cors());
-
-// const mongoUri = process.env.MONGO_URI || "mongodb://localhost:27017/quickbite";
-// mongoose.connect(mongoUri, { useNewUrlParser: true, useUnifiedTopology: true });
-
-// // Import the User model
-// const User = require("./models/User");
-
-// app.get("/", (req, res) => {
-//     res.send("Welcome to the User Service!");
-// });
-
-// // Register User
-// app.post("/api/register", (req, res) => {
-//     const { name, email, password } = req.body;
-
-//     const newUser = new User({
-//         name,
-//         email,
-//         password,
-//     });
-
-//     newUser
-//         .save()
-//         .then(() => {
-//             console.log("User registered:", name, email);
-//             res.json({ message: "User registered successfully" });
-//         })
-//         .catch((err) => {
-//             console.error("Error registering user:", err);
-//             res.status(500).json({ error: "Failed to register user" });
-//         });
-// });
-
-// // Get All Users
-// app.get("/api/users", (req, res) => {
-//     User.find()
-//         .select('-password') // Exclude the password field from the response
-//         .then((users) => {
-//             res.json({ users });
-//         })
-//         .catch((err) => {
-//             console.error("Error fetching users:", err);
-//             res.status(500).json({ error: "Failed to fetch users" });
-//         });
-// });
-
-// const port = process.env.PORT || 5000;
-// app.listen(port, () => console.log(`User service running on port ${port}`));
-
-
 const express = require('express');
 const app = express();
 const PORT = process.env.PORT || 5001;
 
-app.get('/users', (req, resp) => {
-    resp.json([{id: 1, name: 'Piyumi Ranasuriya'}]);
-})
+const users = [
+    { id: 1, username: 'Piyumi', password: 'password123' }
+];
 
+const path = require('path');
+
+
+// Middleware to serve static files
+app.use(express.static('public'));  // 'public' is the folder that holds your HTML, CSS, and other assets
+
+app.use(express.json())
+
+// Get all users (for testing purposes)
+app.get('/users', (req, resp) => {
+    resp.json(users);
+});
+
+// Login route
+app.post('/login', (req, resp) => {
+    const { username, password } = req.body;
+
+    // Simple validation (in real-world, check password securely)
+    const user = users.find(u => u.username === username && u.password === password);
+
+    
+    if (user) {
+        resp.json({ message: 'Login successful!', userId: user.id });
+    } else {
+        resp.status(401).json({ message: 'Invalid credentials!' });
+    }
+
+    // Serve login.html directly as a response to the POST request
+    resp.sendFile(path.join(__dirname, 'public', 'login.html'));
+});
 app.listen(PORT, () => {
-    console.log('User Service is running on port: '+ PORT);
-})
+    console.log('User Service is running on port: ' + PORT);
+});

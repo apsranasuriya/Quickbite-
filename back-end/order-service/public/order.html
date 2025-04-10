@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Order Service</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0; padding: 0;
+            background-color: #f4f4f4;
+        }
+        .container {
+            width: 90%; max-width: 600px;
+            margin: 30px auto;
+            padding: 20px;
+            background: white;
+            border-radius: 10px;
+        }
+        label, input, select, textarea {
+            display: block;
+            width: 100%;
+            margin-bottom: 15px;
+        }
+        button {
+            padding: 10px;
+            background: #28a745;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        #confirmation {
+            margin-top: 20px;
+            background: #d4edda;
+            padding: 15px;
+            border-radius: 5px;
+            display: none;
+        }
+        #all-orders {
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Place Your Order</h2>
+        <form id="orderForm">
+            <label>Full Name:</label>
+            <input type="text" name="name" required>
+
+            <label>Email:</label>
+            <input type="email" name="email" required>
+
+            <label>Phone:</label>
+            <input type="tel" name="phone" required>
+
+            <label>Address:</label>
+            <textarea name="address" required></textarea>
+
+            <label>Item 1:</label>
+            <select name="item1">
+                <option value="Pizza">Pizza</option>
+                <option value="Burger">Burger</option>
+                <option value="Salad">Salad</option>
+            </select>
+            <input type="number" name="quantity1" placeholder="Quantity" min="1" required>
+
+            <label>Item 2:</label>
+            <select name="item2">
+                <option value="Pizza">Pizza</option>
+                <option value="Burger">Burger</option>
+                <option value="Salad">Salad</option>
+            </select>
+            <input type="number" name="quantity2" placeholder="Quantity" min="1" required>
+
+            <label>Payment Method:</label>
+            <select name="payment">
+                <option value="Credit Card">Credit Card</option>
+                <option value="Debit Card">Debit Card</option>
+                <option value="Cash on Delivery">Cash on Delivery</option>
+            </select>
+
+            <label>Delivery Time:</label>
+            <input type="datetime-local" name="delivery_time">
+
+            <label>Special Instructions:</label>
+            <textarea name="special_instructions"></textarea>
+
+            <button type="submit">Submit Order</button>
+        </form>
+
+        <div id="confirmation"></div>
+
+        <div id="all-orders"></div>
+    </div>
+
+    <script>
+        const form = document.getElementById('orderForm');
+        const confirmation = document.getElementById('confirmation');
+        const allOrdersDiv = document.getElementById('all-orders');
+
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            const formData = new FormData(form);
+            const order = {
+                name: formData.get('name'),
+                email: formData.get('email'),
+                phone: formData.get('phone'),
+                address: formData.get('address'),
+                items: [
+                    { item: formData.get('item1'), quantity: formData.get('quantity1') },
+                    { item: formData.get('item2'), quantity: formData.get('quantity2') }
+                ],
+                payment: formData.get('payment'),
+                delivery_time: formData.get('delivery_time'),
+                special_instructions: formData.get('special_instructions')
+            };
+
+            const res = await fetch('/order', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(order)
+            });
+
+            if (res.ok) {
+                const result = await res.json();
+                confirmation.style.display = 'block';
+                confirmation.innerHTML = `
+                    <strong>Order has been placed!</strong><br>
+                    Name: ${result.name}<br>
+                    Items: ${result.items.map(i => `${i.item} x${i.quantity}`).join(', ')}<br>
+                    Payment: ${result.payment}<br>
+                    Delivery: ${result.delivery_time || 'ASAP'}
+                `;
+                form.reset();
+                loadOrders();
+            }
+        });
+
+        async function loadOrders() {
+            const res = await fetch('/orders');
+            const data = await res.json();
+
+            allOrdersDiv.innerHTML = '<h3>All Orders</h3>' + data.map(order => `
+                <div style="margin-bottom: 10px; border-bottom: 1px solid #ccc; padding: 10px;">
+                    <strong>${order.name}</strong><br>
+                    ${order.items.map(i => `${i.item} x${i.quantity}`).join(', ')}
+                </div>
+            `).join('');
+        }
+
+        loadOrders(); // Load orders when the page loads
+    </script>
+</body>
+</html>

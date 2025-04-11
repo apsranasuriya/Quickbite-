@@ -109,6 +109,6 @@ jobs:
 
       - name: Deploy services to Kubernetes
         run: |
-          kubectl apply -f k8s/user-service-deployment.yaml
-          kubectl apply -f k8s/order-service-deployment.yaml
+          kubectl apply -f k8s/user-service.yaml
+          kubectl apply -f k8s/order-service.yaml
 

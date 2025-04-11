@@ -103,13 +103,16 @@ jobs:
 
       # 6. Deploy to Kubernetes cluster (optional)
       - name: Set up Kubeconfig
+        if: ${{ secrets.KUBECONFIG_CONTENT != '' }}
         run: |
           mkdir -p ~/.kube
           echo "${{ secrets.KUBECONFIG_CONTENT }}" > ~/.kube/config
 
       - name: Deploy services to Kubernetes
+        if: ${{ secrets.KUBECONFIG_CONTENT != '' }}
         run: |
-          kubectl apply -f back-end/k8s/user-service.yaml  
-          kubectl apply -f back-end/k8s/order-service.yaml
+         kubectl apply -f back-end/k8s/user-service.yaml
+         kubectl apply -f back-end/k8s/order-service.yaml
+
 
 

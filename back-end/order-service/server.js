@@ -9,6 +9,10 @@ app.use(express.json());
 // Serve static frontend files from 'public' directory
 app.use(express.static(path.join(__dirname, 'public')));
 
+app.get('/order.html', (req, res) => {
+    res.sendFile(path.join(__dirname, 'public', 'order.html'));
+  });
+
 // In-memory order "database"
 let orders = [];
 

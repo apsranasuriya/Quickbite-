@@ -76,17 +76,6 @@
       color: #ff5a00;
       text-decoration: none;
     }
-
-    @media (max-width: 768px) {
-      .center-wrapper {
-        flex-direction: column;
-        text-align: center;
-      }
-
-      .form-side {
-        width: 100%;
-      }
-    }
   </style>
 </head>
 
@@ -118,9 +107,9 @@
       const password = document.getElementById('password').value;
       const responseDiv = document.getElementById('response');
 
-      // Sending login credentials to the backend
+      // Sending login credentials to the backend (localhost:5001)
       const response = await fetch('http://localhost:5001/login', {
-        method: 'POST',  // Ensure the method is POST
+        method: 'POST',
         headers: {
           'Content-Type': 'application/json'  // Make sure to specify the content type
         },
@@ -130,8 +119,14 @@
       const data = await response.json();
 
       if (response.ok) {
+        // If login is successful, display success message and navigate to the order page
         responseDiv.innerHTML = `<p style="color: green;">${data.message}</p>`;
+
+        setTimeout(() => {
+          window.open('http://localhost:5002/order.html', '_blank');
+        }, 100);
       } else {
+        // If login fails, display error message
         responseDiv.innerHTML = `<p style="color: red;">${data.message}</p>`;
       }
     });

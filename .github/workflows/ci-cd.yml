@@ -37,33 +37,4 @@ jobs:
           docker build -t piyumir/order-service:latest ./back-end/order-service
           docker push piyumir/order-service:latest
 
-      # Step 6: Set up kubeconfig
-      - name: Set up Kubeconfig
-        run: |
-          mkdir -p ~/.kube
-          cat <<EOF > ~/.kube/config
-          apiVersion: v1
-          kind: Config
-          clusters:
-          - name: minikube
-            cluster:
-              server: https://192.168.49.2:8443
-              certificate-authority-data: ${{ secrets.KUBECONFIG_CA_CERT }}
-          contexts:
-          - name: minikube
-            context:
-              cluster: minikube
-              user: minikube
-          current-context: minikube
-          users:
-          - name: minikube
-            user:
-              client-certificate-data: ${{ secrets.KUBECONFIG_CLIENT_CERT }}
-              client-key-data: ${{ secrets.KUBECONFIG_CLIENT_KEY }}
-          EOF
-
-      # Step 7: Deploy to Kubernetes
-      - name: Deploy services to Kubernetes
-        run: |
-          kubectl apply -f back-end/k8s/user-service.yaml
-          kubectl apply -f back-end/k8s/order-service.yaml
+  

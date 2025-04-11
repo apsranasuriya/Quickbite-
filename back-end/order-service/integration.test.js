@@ -1,6 +1,6 @@
 const request = require('supertest');
 const userServiceApp = require('../user-service/server.js');  // Assuming user-service is exported
-const orderServiceApp = require('../order-service/server.js'); // Assuming order-service is exported
+const orderServiceApp = require('./server.js'); // Assuming order-service is exported
 
 describe('Integration Tests - User and Order Services', () => {
   let userServer;

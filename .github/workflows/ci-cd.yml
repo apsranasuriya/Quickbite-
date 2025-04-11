@@ -3,67 +3,66 @@ name: CI/CD Pipeline for QuickBite
 on:
   push:
     branches:
-      - piyumi
+      - piyumi  # Replace with your branch name
 
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
 
     steps:
-      # 1. Checkout repo
+      # Step 1: Checkout code
       - name: Checkout code
         uses: actions/checkout@v2
 
-      # 2. Set up Docker Buildx
+      # Step 2: Set up Docker
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v2
 
-      # 3. Log in to Docker Hub
+      # Step 3: Login to Docker Hub
       - name: Log in to Docker Hub
         uses: docker/login-action@v2
         with:
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
 
-      # 4. Build and push user-service image
+      # Step 4: Build and push user-service image
       - name: Build & Push user-service Docker image
         run: |
           docker build -t piyumir/user-service:latest ./back-end/user-service
           docker push piyumir/user-service:latest
 
-      # 5. Build and push order-service image
+      # Step 5: Build and push order-service image
       - name: Build & Push order-service Docker image
         run: |
           docker build -t piyumir/order-service:latest ./back-end/order-service
           docker push piyumir/order-service:latest
 
-      # 6. Set up Kubeconfig
+      # Step 6: Set up kubeconfig
       - name: Set up Kubeconfig
         run: |
           mkdir -p ~/.kube
-          echo "
+          cat <<EOF > ~/.kube/config
           apiVersion: v1
+          kind: Config
           clusters:
-          - cluster:
-              certificate-authority-data: ${{ secrets.KUBECONFIG_CA_CERT }}
+          - name: minikube
+            cluster:
               server: https://192.168.49.2:8443
-            name: minikube
+              certificate-authority-data: ${{ secrets.KUBECONFIG_CA_CERT }}
           contexts:
-          - context:
+          - name: minikube
+            context:
               cluster: minikube
               user: minikube
-            name: minikube
           current-context: minikube
-          kind: Config
-          preferences: {}
           users:
           - name: minikube
             user:
               client-certificate-data: ${{ secrets.KUBECONFIG_CLIENT_CERT }}
               client-key-data: ${{ secrets.KUBECONFIG_CLIENT_KEY }}
-          " > ~/.kube/config
+          EOF
 
-      # 7. Deploy to Kubernetes
+      # Step 7: Deploy to Kubernetes
       - name: Deploy services to Kubernetes
         run: |
           kubectl apply -f back-end/k8s/user-service.yaml

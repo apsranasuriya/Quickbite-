@@ -98,7 +98,7 @@ jobs:
       - name: Build & Push order-service Docker image
         run: |
           docker build -t piyumir/order-service:latest ./back-end/order-service
-          docker push apiyumir/order-service:latest
+          docker push piyumir/order-service:latest
 
 
       # 6. Deploy to Kubernetes cluster (optional)

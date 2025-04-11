@@ -100,25 +100,30 @@ jobs:
           docker build -t piyumir/order-service:latest ./back-end/order-service
           docker push piyumir/order-service:latest
 
-# Deploy to Kubernetes cluster
+
+       # Job to deploy to Kubernetes cluster
   deploy:
     runs-on: ubuntu-latest
-    needs: build_and_push
+
     steps:
-      # Checkout code again (as the context changes between jobs)
+      # Checkout the code again (needed for subsequent steps)
       - name: Checkout code
         uses: actions/checkout@v2
 
-      # Set up Kubeconfig
+      # Set up Kubeconfig to connect to your Kubernetes cluster (Minikube)
       - name: Set up Kubeconfig
         run: |
           mkdir -p ~/.kube
           echo "${{ secrets.KUBECONFIG_CONTENT }}" > ~/.kube/config
 
-      # Deploy to Kubernetes (user-service and order-service)
-      - name: Deploy services to Kubernetes
+      # Deploy user-service to Kubernetes
+      - name: Deploy user-service to Kubernetes
         run: |
           kubectl apply -f back-end/k8s/user-service.yaml
+
+      # Deploy order-service to Kubernetes
+      - name: Deploy order-service to Kubernetes
+        run: |
           kubectl apply -f back-end/k8s/order-service.yaml
 
 

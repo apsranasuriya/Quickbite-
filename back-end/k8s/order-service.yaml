@@ -14,12 +14,9 @@ spec:
     spec:
       containers:
         - name: order-service
-          image: your-dockerhub-username/order-service:latest # Replace with your Docker image
+          image: piyumir/order-service/order-service:latest # Replace with your Docker image
           ports:
-            - containerPort: 5001
-          env:
-            - name: MONGO_URI
-              value: "mongodb://mongo:27017/quickbite"
+            - containerPort: 5002
 
 ---
 apiVersion: v1
@@ -31,6 +28,6 @@ spec:
     app: order-service
   ports:
     - protocol: TCP
-      port: 5001  # External Port
-      targetPort: 5001  # Container Port
+      port: 5002 # External Port
+      targetPort: 5002 # Container Port
   type: ClusterIP  # Change to NodePort if you want external access

@@ -91,14 +91,15 @@ jobs:
       # 4. Build and push user-service image
       - name: Build & Push user-service Docker image
         run: |
-          docker build -t ${{ secrets.DOCKER_USERNAME }}/user-service:latest ./back-end/user-service
-          docker push ${{ secrets.DOCKER_USERNAME }}/user-service:latest
+          docker build -t apsranasuriya/user-service:latest ./back-end/user-service
+          docker push apsranasuriya/user-service:latest
 
       # 5. Build and push order-service image
       - name: Build & Push order-service Docker image
         run: |
-          docker build -t ${{ secrets.DOCKER_USERNAME }}/order-service:latest ./back-end/order-service
-          docker push ${{ secrets.DOCKER_USERNAME }}/order-service:latest
+          docker build -t apsranasuriya/order-service:latest ./back-end/order-service
+          docker push apsranasuriya/order-service:latest
+
 
       # 6. Deploy to Kubernetes cluster (optional)
       - name: Set up Kubeconfig

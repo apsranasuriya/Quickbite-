@@ -14,9 +14,17 @@ spec:
     spec:
       containers:
         - name: user-service
-          image: user-service:latest
+          image: piyumir/user-service:latest  # Replace with your Docker image
           ports:
             - containerPort: 5001
+          resources:
+            requests:
+              memory: "256Mi"
+              cpu: "250m"
+            limits:
+              memory: "512Mi"
+              cpu: "500m"
+
 ---
 apiVersion: v1
 kind: Service
@@ -29,4 +37,4 @@ spec:
     - protocol: TCP
       port: 5001
       targetPort: 5001
-  type: LoadBalancer
+  type: ClusterIP  # Use NodePort or LoadBalancer if external access is needed

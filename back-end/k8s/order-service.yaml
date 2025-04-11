@@ -14,9 +14,16 @@ spec:
     spec:
       containers:
         - name: order-service
-          image: piyumir/order-service/order-service:latest # Replace with your Docker image
+          image: piyumir/order-service:latest  # Replace with your Docker image
           ports:
             - containerPort: 5002
+          resources:
+            requests:
+              memory: "256Mi"
+              cpu: "250m"
+            limits:
+              memory: "512Mi"
+              cpu: "500m"
 
 ---
 apiVersion: v1
@@ -28,6 +35,6 @@ spec:
     app: order-service
   ports:
     - protocol: TCP
-      port: 5002 # External Port
-      targetPort: 5002 # Container Port
-  type: ClusterIP  # Change to NodePort if you want external access
+      port: 5002
+      targetPort: 5002
+  type: ClusterIP  # Use NodePort or LoadBalancer if external access is needed

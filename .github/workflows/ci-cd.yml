@@ -1,66 +1,3 @@
-# name: CI/CD Pipeline for Node.js Microservices
-
-# on:
-#   push:
-#     branches:
-#       - piyumi  # Trigger pipeline on changes to the 'master' branch
-
-# jobs:
-#   # Job for User Service
-#   user-service:
-#     runs-on: ubuntu-latest  # Use the latest version of Ubuntu
-
-#     steps:
-#       # Step 1: Checkout code from GitHub
-#       - name: Checkout code
-#         uses: actions/checkout@v2
-
-#       # Step 2: Set up Node.js for user-service
-#       - name: Set up Node.js for user-service
-#         uses: actions/setup-node@v2
-#         with:
-#           node-version: '18'  # Use the appropriate Node.js version
-
-#       # Step 3: Install dependencies for user-service
-#       - name: Install dependencies for user-service
-#         run: |
-#           cd back-end/user-service
-#           npm install  # Installs the packages listed in user-service's package.json
-
-#       # Step 4: Run tests for user-service
-#       - name: Run tests for user-service
-#         run: |
-#           cd back-end/user-service
-#           npm test  # Run tests (make sure you have tests set up)
-
-#   # Job for Order Service
-#   order-service:
-#     runs-on: ubuntu-latest  # Use the latest version of Ubuntu
-
-#     steps:
-#       # Step 1: Checkout code from GitHub
-#       - name: Checkout code
-#         uses: actions/checkout@v2
-
-#       # Step 2: Set up Node.js for order-service
-#       - name: Set up Node.js for order-service
-#         uses: actions/setup-node@v2
-#         with:
-#           node-version: '16'  # Use the appropriate Node.js version
-
-#       # Step 3: Install dependencies for order-service
-#       - name: Install dependencies for order-service
-#         run: |
-#           cd back-end/order-service
-#           npm install  # Installs the packages listed in order-service's package.json
-
-#       # Step 4: Run tests for order-service
-#       - name: Run tests for order-service
-#         run: |
-#           cd back-end/order-service
-#           npm test  # Run tests (make sure you have tests set up)
-
-
 name: CI/CD Pipeline for QuickBite
 
 on:
@@ -77,11 +14,11 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
 
-      # 2. Set up Docker
+      # 2. Set up Docker Buildx
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v2
 
-      # 3. Login to Docker Hub
+      # 3. Log in to Docker Hub
       - name: Log in to Docker Hub
         uses: docker/login-action@v2
         with:
@@ -100,14 +37,7 @@ jobs:
           docker build -t piyumir/order-service:latest ./back-end/order-service
           docker push piyumir/order-service:latest
 
-
-jobs:
-  deploy:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
-
+      # 6. Set up Kubeconfig
       - name: Set up Kubeconfig
         run: |
           mkdir -p ~/.kube
@@ -133,6 +63,7 @@ jobs:
               client-key-data: ${{ secrets.KUBECONFIG_CLIENT_KEY }}
           " > ~/.kube/config
 
+      # 7. Deploy to Kubernetes
       - name: Deploy services to Kubernetes
         run: |
           kubectl apply -f back-end/k8s/user-service.yaml

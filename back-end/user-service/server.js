@@ -39,3 +39,5 @@ app.post('/login', (req, resp) => {
 app.listen(PORT, () => {
     console.log('User Service is running on port: ' + PORT);
 });
+
+// module.exports = app; 

@@ -27,7 +27,39 @@ QuickBite is a modular and scalable food ordering system built using **microserv
 ---
 
 ## 📁 Project Structure
-quickbite/ ├── back-end/ │ ├── order-service/ │ │ ├── public/ │ │ ├── .env │ │ ├── Dockerfile │ │ ├── server.js │ │ ├── integration.test.js │ │ ├── orderService.test.js │ │ ├── package.json │ │ └── package-lock.json │ │ │ ├── user-service/ │ │ ├── public/ │ │ ├── .env │ │ ├── Dockerfile │ │ ├── server.js │ │ ├── integration.test.js │ │ ├── userService.test.js │ │ ├── package.json │ │ └── package-lock.json │ │ ├── tests/ │ │ ├── e2e.test.js │ │ ├── package.json │ │ └── package-lock.json │ ├── docker-compose.yml ├── express.json() ├── extra-scrape-configs.yaml ├── .gitignore └── README.md
+quickbite/
+├── back-end/
+│   ├── order-service/
+│   │   ├── public/
+│   │   ├── .env
+│   │   ├── Dockerfile
+│   │   ├── server.js
+│   │   ├── integration.test.js
+│   │   ├── orderService.test.js
+│   │   ├── package.json
+│   │   └── package-lock.json
+│   │
+│   ├── user-service/
+│   │   ├── public/
+│   │   ├── .env
+│   │   ├── Dockerfile
+│   │   ├── server.js
+│   │   ├── integration.test.js
+│   │   ├── userService.test.js
+│   │   ├── package.json
+│   │   └── package-lock.json
+│   │
+│   ├── tests/
+│   │   ├── e2e.test.js
+│   │   ├── package.json
+│   │   └── package-lock.json
+│
+├── docker-compose.yml
+├── express.json
+├── extra-scrape-configs.yaml
+├── .gitignore
+└── README.md
+
 ---
 
 ---
